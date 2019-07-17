@@ -38,7 +38,7 @@ from testclasses import Wall
 from testclasses import wall_one
 
 
-JSON_CAN_DUMP = (basestring, int, float, long, dict, list, types.NoneType)
+JSON_CAN_DUMP = (basestring, int, float, long, dict, list, type(None))
 
 
 class SimpleDumper(VisitorPattern):

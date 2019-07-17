@@ -600,7 +600,7 @@ class MultiFieldSelector(object):
         head_types = set(type(x) for x in self.heads)
         self.has_int = int in head_types or long in head_types
         self.has_string = any(issubclass(x, basestring) for x in head_types)
-        self.has_none = types.NoneType in head_types
+        self.has_none = type(None) in head_types
         self.complete = self.has_none and self.heads[None] is all
         if self.has_none and (self.has_int or self.has_string):
             # this should be possible, but I'm punting on it for now
@@ -750,7 +750,7 @@ class MultiFieldSelector(object):
             False
             >>>
         """
-        if isinstance(index, (basestring, types.IntType, types.NoneType)):
+        if isinstance(index, (basestring, int, type(None))):
             return self.has_none or index in self.heads
         elif index is any:
             return True if len(self.heads) else False

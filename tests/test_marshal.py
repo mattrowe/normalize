@@ -15,6 +15,7 @@
 #
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import json
 from os import environ
@@ -148,7 +149,7 @@ class TestRecordMarshaling(unittest2.TestCase):
                 )
             )
         elif "SHOW_JSON_TESTS" in environ:
-            print "%s: ok (%r)" % (pdisp, got)
+            print("%s: ok (%r)" % (pdisp, got))
 
     def test_assertJsonDataEqual(self):
         """Answering the koan, "Who will test the tests themselves?"

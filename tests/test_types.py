@@ -110,7 +110,7 @@ class TestTypeLibrary(unittest2.TestCase):
         with self.assertRaises(TypeError):
             p.integer = "foo"
         p.integer = 1e20
-        self.assertEqual(p.integer, 100000000000000000000L)
+        self.assertEqual(p.integer, 100000000000000000000)
 
         from normalize import from_json, to_json
         p2 = from_json(Props, to_json(p))
@@ -142,7 +142,7 @@ class TestSubTypes(unittest2.TestCase):
             count = Property(
                 isa=(NaturalNumber, BigNaturalNumber),
                 coerce=lambda x: (
-                    abs(int(x)) if abs(long(x)) < sys.maxint else
+                    abs(int(x)) if abs(long(x)) < sys.maxsize else
                     abs(long(x))
                 ),
                 check=lambda N: N > 0,
@@ -153,7 +153,7 @@ class TestSubTypes(unittest2.TestCase):
         nbo.count = "256"
         self.assertEqual(nbo.count, 256)
         nbo.count = 1.832e19
-        self.assertEqual(nbo.count, 18320000000000000000L)
+        self.assertEqual(nbo.count, 18320000000000000000)
         # type matches, but subtype doesn't
         nbo.count = -10
         self.assertEqual(nbo.count, 10)
