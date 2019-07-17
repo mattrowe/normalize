@@ -16,6 +16,9 @@
 
 from __future__ import absolute_import
 
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 import collections
 from copy import deepcopy
 import functools
@@ -32,7 +35,7 @@ from normalize.exc import FieldSelectorKeyError
 def _try_index(instance, selector):
     if isinstance(instance, basestring):
         return False
-    if isinstance(selector, (long, int)):
+    if isinstance(selector, (int, int)):
         return True
     if getattr(instance, "__getitem__", False):
         return True
@@ -73,7 +76,7 @@ class FieldSelector(object):
             if any(
                 e for e in expr_selectors if not (
                     isinstance(e, basestring) or
-                    isinstance(e, (int, long)) or e is None
+                    isinstance(e, (int, int)) or e is None
                 )
             ):
                 raise ValueError(
@@ -95,7 +98,7 @@ class FieldSelector(object):
     def add_index(self, index):
         """Extends the selector, adding a new indexed collection lookup at the
         end."""
-        if not isinstance(index, (int, long)):
+        if not isinstance(index, (int, int)):
             raise ValueError("index must be an int or a long")
         self.selectors.append(index)
 
@@ -268,7 +271,7 @@ class FieldSelector(object):
                 try:
                     record = record[selector]
                 except IndexError:
-                    if isinstance(selector, (int, long)):
+                    if isinstance(selector, (int, int)):
                         if len(record) != selector:
                             raise ValueError(
                                 "FieldSelector set out of order: "
@@ -384,7 +387,7 @@ class FieldSelector(object):
         end = len(self.selectors)
         if len(self.selectors) > len(other.selectors):
             end = len(other.selectors)
-        for i in xrange(end):
+        for i in range(end):
             self_selector = self.selectors[i]
             other_selector = other.selectors[i]
             if self_selector == other_selector:
@@ -425,7 +428,7 @@ class FieldSelector(object):
             print fs + bar  # <FieldSelector: .foo.bar>
             print fs + [0]  # <FieldSelector: .foo[0]>
         """
-        if isinstance(other, (basestring, int, long)):
+        if isinstance(other, (basestring, int, int)):
             return type(self)(self.selectors + [other])
         elif isinstance(other, collections.Iterable):
             return type(self)(self.selectors + list(other))
@@ -498,7 +501,7 @@ class FieldSelector(object):
 
 
 def _fmt_selector_path(selector):
-    if isinstance(selector, (int, long)):
+    if isinstance(selector, (int, int)):
         return "[%d]" % selector
     elif selector is None:
         return "[*]"
@@ -575,7 +578,7 @@ class MultiFieldSelector(object):
         heads = collections.defaultdict(set)
         for other in others:
             if isinstance(other, MultiFieldSelector):
-                for head, tail in other.heads.iteritems():
+                for head, tail in other.heads.items():
                     heads[head].add(tail)
             elif isinstance(other, FieldSelector):
                 selectors.append(other)
@@ -593,12 +596,12 @@ class MultiFieldSelector(object):
 
         self.heads = dict(
             (head, all if all in tail else MultiFieldSelector(*tail))
-            for head, tail in heads.iteritems()
+            for head, tail in heads.items()
         ) if None not in heads or heads[None] is not all else {None: all}
 
         # sanity assertions follow
         head_types = set(type(x) for x in self.heads)
-        self.has_int = int in head_types or long in head_types
+        self.has_int = int in head_types or int in head_types
         self.has_string = any(issubclass(x, basestring) for x in head_types)
         self.has_none = type(None) in head_types
         self.complete = self.has_none and self.heads[None] is all
@@ -606,7 +609,7 @@ class MultiFieldSelector(object):
             # this should be possible, but I'm punting on it for now
             raise ValueError(
                 "MultiFieldSelector cannot yet specify a list and a hash/"
-                "object at the same level: %r" % self.heads.keys()
+                "object at the same level: %r" % list(self.heads.keys())
             )
 
     def __str__(self):
@@ -629,13 +632,13 @@ class MultiFieldSelector(object):
         constructor.
         """
         if len(self.heads) == 1:
-            return _fmt_mfs_path(self.heads.keys()[0], self.heads.values()[0])
+            return _fmt_mfs_path(list(self.heads.keys())[0], list(self.heads.values())[0])
         else:
             return "(" + "|".join(
-                _fmt_mfs_path(k, v) for (k, v) in self.heads.items()
+                _fmt_mfs_path(k, v) for (k, v) in list(self.heads.items())
             ) + ")"
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(len(self.heads))
 
     def __iter__(self):
@@ -653,7 +656,7 @@ class MultiFieldSelector(object):
             <FieldSelector: .c>
             >>>
         """
-        for head, tail in self.heads.iteritems():
+        for head, tail in self.heads.items():
             head_selector = self.FieldSelector((head,))
             if tail is all:
                 if head is None:
@@ -708,7 +711,7 @@ class MultiFieldSelector(object):
             # XXX useful?
             assert len(self.heads) <= 1, "ambigious fetch of 'any'"
             if len(self.heads) == 1:
-                index = self.heads.keys()[0]
+                index = list(self.heads.keys())[0]
             else:
                 return self  # XXX wat
 
@@ -800,7 +803,7 @@ class MultiFieldSelector(object):
             else:
                 vals = list(
                     self._get(obj[head], tail) for head, tail in
-                    self.heads.iteritems()
+                    self.heads.items()
                 )
             if isinstance(obj, ListCollection):
                 return ctor(values=vals)
@@ -810,12 +813,12 @@ class MultiFieldSelector(object):
             if self.has_none:
                 tail = self.heads[None]
                 return ctor(
-                    (k, self._get(v, tail)) for k, v in obj.iteritems()
+                    (k, self._get(v, tail)) for k, v in obj.items()
                 )
             else:
                 return ctor(
                     (head, self._get(obj[head], tail)) for head, tail in
-                    self.heads.iteritems() if head in obj
+                    self.heads.items() if head in obj
                 )
         else:
             if self.has_int or (self.has_none and self.heads[None] is not all):
@@ -828,7 +831,7 @@ class MultiFieldSelector(object):
                 return self._get(obj, all)
             else:
                 kwargs = dict()
-                for head, tail in self.heads.iteritems():
+                for head, tail in self.heads.items():
                     val = getattr(obj, head, None)
                     if val is not None:
                         kwargs[head] = self._get(val, tail)

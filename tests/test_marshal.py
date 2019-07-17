@@ -17,6 +17,10 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+from builtins import str
+from builtins import zip
+from builtins import range
+from past.builtins import basestring
 import json
 from os import environ
 import pickle
@@ -56,14 +60,14 @@ class CheeseCupboardRecord(Record):
     favorites = DictProperty(of=CheeseRecord)
 
 
-json_data_number_types = (basestring, int, long, float)
+json_data_number_types = (basestring, int, int, float)
 
 
 def decode_json_number(str_or_num):
     """Returns a precise number object from a string or number"""
     if isinstance(str_or_num, basestring):
         if re.match(r'-?\d+$', str_or_num):
-            return long(str_or_num)
+            return int(str_or_num)
         if not re.match(r'-?\d+(\.\d+)?([eE][\-+]?\d+)?$', str_or_num):
             raise ValueError("invalid json number: '%s'" % str_or_num)
         return float(str_or_num)
@@ -100,9 +104,9 @@ class TestRecordMarshaling(unittest2.TestCase):
         """Test that two JSON-data structures are the same.  We can't use
         simple assertEqual, because '23' and 23 should compare the same."""
         if isinstance(got, basestring):
-            got = unicode(got)
+            got = str(got)
         if isinstance(wanted, basestring):
-            wanted = unicode(wanted)
+            wanted = str(wanted)
 
         pdisp = path or "top level"
 

@@ -17,6 +17,8 @@
 """``normalize.property.types`` provides an assortment of pre-generated
 types"""
 
+from builtins import str
+from past.builtins import basestring
 import datetime
 import numbers
 from sys import maxsize
@@ -57,7 +59,7 @@ IntProperty = make_property_type(
     },
 )
 LongProperty = make_property_type(
-    "LongProperty", isa=long, trait_name="long",
+    "LongProperty", isa=int, trait_name="long",
     attrs={
         "__doc__": "A property which must be a ``long``",
     },
@@ -65,7 +67,7 @@ LongProperty = make_property_type(
 IntegerProperty = make_property_type(
     "IntegerProperty", isa=numbers.Integral, trait_name="integer",
     coerce=lambda x: (
-        int(x) if abs(float(x)) < maxsize else long(x)
+        int(x) if abs(float(x)) < maxsize else int(x)
     ),
     attrs={
         "__doc__": "A property which holds an integer, int or long",
@@ -94,7 +96,7 @@ FloatProperty = make_property_type(
 )
 UnicodeProperty = make_property_type(
     "UnicodeProperty", base_type=StringProperty,
-    isa=unicode, coerce=lambda s: unicode(s) if isinstance(s, str) else s,
+    isa=str, coerce=lambda s: str(s) if isinstance(s, str) else s,
     trait_name="unicode",
     attrs={
         "__doc__": "A property which must be a ``unicode`` or ``str`` "
@@ -128,7 +130,7 @@ def coerce_date(not_a_date):
 def coerce_number(not_a_number):
     if isinstance(not_a_number, basestring):
         try:
-            return long(not_a_number)
+            return int(not_a_number)
         except ValueError:
             return float(not_a_number)
     else:
@@ -168,4 +170,4 @@ DatetimeProperty = make_property_type(
 )
 
 
-__all__ = tuple(k for k in globals().keys() if k.endswith("Property"))
+__all__ = tuple(k for k in list(globals().keys()) if k.endswith("Property"))

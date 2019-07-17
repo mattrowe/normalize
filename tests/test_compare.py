@@ -16,6 +16,7 @@
 
 from __future__ import absolute_import
 
+from builtins import str
 import unittest
 
 from normalize.coll import list_of
@@ -330,7 +331,7 @@ class TestRecordComparison(unittest.TestCase):
         )
 
         sparta = dict()
-        for relation, member in person_b.family.items():
+        for relation, member in list(person_b.family.items()):
             sparta[relation] = Spartan(member.__getstate__())
 
         self.assertDifferences(

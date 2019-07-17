@@ -18,6 +18,9 @@
 
 from __future__ import absolute_import
 
+from builtins import str
+from builtins import zip
+from builtins import range
 import re
 import types
 import unittest2
@@ -264,7 +267,7 @@ class TestProperties(unittest2.TestCase):
             def coll_to_tuples(cls, values):
                 if isinstance(values, bytes):
                     values = values.split(',')
-                    for i, v in zip(xrange(0, len(values)), values):
+                    for i, v in zip(range(0, len(values)), values):
                         yield i, {'name': v}
                 else:
                     for x in super(CustomColl, cls).coll_to_tuples(values):

@@ -17,6 +17,9 @@
 
 from __future__ import absolute_import
 
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 import collections
 import sys
 import types
@@ -220,14 +223,14 @@ class DictCollection(KeyedCollection):
                 colltype=cls,
             )
         if isinstance(coll, collections.Mapping):
-            for k, v in coll.iteritems():
+            for k, v in coll.items():
                 yield k, v
         elif isinstance(coll, collections.Sequence):
             i = 0
             for v in coll:
                 yield (i, v)
                 i += 1
-        elif hasattr(coll, "next") and callable(coll.next):
+        elif hasattr(coll, "next") and callable(coll.__next__):
             i = 0
             for v in coll:
                 if isinstance(v, tuple) and len(v) == 2:
@@ -237,7 +240,7 @@ class DictCollection(KeyedCollection):
                 i += 1
 
     def itertuples(self):
-        return self._values.iteritems()
+        return iter(self._values.items())
 
     def iteritems(self):
         return self.itertuples()
@@ -255,10 +258,10 @@ class DictCollection(KeyedCollection):
         return (v for k, v in self.itertuples())
 
     def keys(self):
-        return self._values.keys()
+        return list(self._values.keys())
 
     def values(self):
-        return self._values.values()
+        return list(self._values.values())
 
     def pop(self, k):
         return self._values.pop(k)
@@ -269,12 +272,12 @@ class DictCollection(KeyedCollection):
     def update(self, iterable=None, **kw):
         keys = getattr(iterable, "keys", None)
         if keys and callable(keys):
-            for k in iterable.keys():
+            for k in list(iterable.keys()):
                 self[k] = self.coerce_value(iterable[k])
         elif iterable is not None:
             for k, v in iterable:
                 self[k] = self.coerce_value(v)
-        for k, v in kw.items():
+        for k, v in list(kw.items()):
             self[k] = self.coerce_value(v)
 
     def __repr__(self):
@@ -320,7 +323,7 @@ class ListCollection(KeyedCollection):
             for k in sorted(coll.keys()):
                 yield (i, coll[k])
         elif isinstance(coll, (collections.Sequence, types.GeneratorType)) or (
-            hasattr(coll, "next") and callable(coll.next)
+            hasattr(coll, "next") and callable(coll.__next__)
         ) or (
             hasattr(coll, "__iter__") and callable(coll.__iter__)
         ):
@@ -362,7 +365,7 @@ class ListCollection(KeyedCollection):
             j += len_
             if j < 0:
                 j = 0
-        for k in xrange(i, j):
+        for k in range(i, j):
             if self[k] == x:
                 return k
         raise ValueError("%r is not in list" % x)
