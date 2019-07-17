@@ -60,7 +60,11 @@ class CheeseCupboardRecord(Record):
     favorites = DictProperty(of=CheeseRecord)
 
 
-json_data_number_types = (basestring, int, int, float)
+try:
+    # python 3 doesn't support longs
+    json_data_number_types = (basestring, int, long, float)
+except:
+    json_data_number_types = (basestring, int, int, float)
 
 
 def decode_json_number(str_or_num):

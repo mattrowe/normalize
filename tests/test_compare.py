@@ -220,7 +220,7 @@ class TestRecordComparison(unittest.TestCase):
         self.assertDifferences(
             compare_record_iter(bert, ubert), ()
         )
-        bert.name = "Bert "
+        bert.name = u"Bert "
         self.assertDifferences(compare_record_iter(bert, ubert), ())
         self.assertDifferences(
             compare_record_iter(bert, ubert,

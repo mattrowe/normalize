@@ -189,8 +189,8 @@ class TestDiffWithMultiFieldSelector(unittest2.TestCase):
         )
         filtered_person = strip_ids_mfs.get(person)
 
-        person.description = ""
-        person.friends[0].description = ""
+        person.description = u""
+        person.friends[0].description = u""
 
         self.assertDifferences(
             person.diff_iter(filtered_person,
@@ -387,10 +387,10 @@ class TestDiffWithMultiFieldSelector(unittest2.TestCase):
             basic_differences,
         )
 
-        person2.friends[0].name.given = "Jim"
+        person2.friends[0].name.given = u"Jim"
         del person2.friends[1].phone_number
-        person2.friends[2].name.family = "Woolf"
-        person2.friends[6].name.family = "Haines"
+        person2.friends[2].name.family = u"Woolf"
+        person2.friends[6].name.family = u"Haines"
 
         self.assertDifferences(
             person.diff_iter(person2, compare_filter=strip_ssn_mfs),
