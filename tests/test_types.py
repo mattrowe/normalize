@@ -46,7 +46,7 @@ class TestTypeLibrary(unittest2.TestCase):
             seq = IntProperty(lazy=True, default=_seq)
             num = NumberProperty()
             fullname = UnicodeProperty(
-                default=lambda self: self.name,
+                default=lambda self: unicode(self.name),
                 lazy=True,
             )
 
@@ -57,7 +57,7 @@ class TestTypeLibrary(unittest2.TestCase):
         self.assertEqual(demo.id, 345)
         self.assertEqual(demo.seq, 0)
         demo.name = "Foo Bar"
-        self.assertEqual(demo.fullname, "Foo Bar")
+        self.assertEqual(demo.fullname, u"Foo Bar")
         self.assertIsInstance(demo.fullname, str)
 
         # FIXME: the actual errors returned in this situation are obtuse

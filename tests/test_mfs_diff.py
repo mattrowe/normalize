@@ -55,13 +55,13 @@ class PersonWithFriends(SurrogatePerson):
 
 
 PEOPLE = (
-    ("James", "Miller", date(1960, 11, 18), '(239) 978-5912'),
-    ("Aaron", "Mora", date(1963, 2, 20), '(262) 860-9595'),
-    ("Laura", "Wolf", date(1966, 8, 13), '(480) 851-7810'),
-    ("Steve", "Chen", date(1967, 6, 11), '(530) 922-5668'),
-    ("Stephanie", "Hart", date(1971, 8, 3), '(614) 608-2940'),
-    ("Kara", "Park", date(1972, 11, 22), '(406) 593-8495'),
-    ("Ruben", "Haynes", date(1975, 4, 8), '(808) 643-7409'),
+    (u"James", u"Miller", date(1960, 11, 18), '(239) 978-5912'),
+    (u"Aaron", u"Mora", date(1963, 2, 20), '(262) 860-9595'),
+    (u"Laura", u"Wolf", date(1966, 8, 13), '(480) 851-7810'),
+    (u"Steve", u"Chen", date(1967, 6, 11), '(530) 922-5668'),
+    (u"Stephanie", u"Hart", date(1971, 8, 3), '(614) 608-2940'),
+    (u"Kara", u"Park", date(1972, 11, 22), '(406) 593-8495'),
+    (u"Ruben", u"Haynes", date(1975, 4, 8), '(808) 643-7409'),
 )
 
 # simplified NANP regex

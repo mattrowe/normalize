@@ -230,7 +230,7 @@ class DictCollection(KeyedCollection):
             for v in coll:
                 yield (i, v)
                 i += 1
-        elif hasattr(coll, "next") and callable(coll.__next__):
+        elif hasattr(coll, "next") and callable(coll.next):
             i = 0
             for v in coll:
                 if isinstance(v, tuple) and len(v) == 2:
@@ -323,7 +323,7 @@ class ListCollection(KeyedCollection):
             for k in sorted(coll.keys()):
                 yield (i, coll[k])
         elif isinstance(coll, (collections.Sequence, types.GeneratorType)) or (
-            hasattr(coll, "next") and callable(coll.__next__)
+            hasattr(coll, "next") and callable(coll.next)
         ) or (
             hasattr(coll, "__iter__") and callable(coll.__iter__)
         ):
