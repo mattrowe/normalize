@@ -237,7 +237,7 @@ def to_json(record, extraneous=True, prop=None):
     elif isinstance(record, (list, tuple, set, frozenset)):
         return list(_json_data(x, extraneous) for x in record)
 
-    elif isinstance(record, (basestring, int, float, types.NoneType)):
+    elif isinstance(record, (basestring, int, float, type(None))):
         return record
 
     else:

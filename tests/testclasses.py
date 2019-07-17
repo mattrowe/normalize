@@ -234,4 +234,4 @@ acent = StarSystem(
 class PullRequest(Record):
     number = Property()
     created_at = DatetimeProperty(default=lambda: datetime.now())
-    merged_at = DatetimeProperty(isa=(datetime, types.NoneType))
+    merged_at = DatetimeProperty(isa=(datetime, type(None)))

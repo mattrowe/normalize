@@ -201,7 +201,7 @@ class DiffOptions(object):
         self.duck_type = duck_type
         self.extraneous = extraneous
         self.recurse = recurse
-        if isinstance(compare_filter, (MultiFieldSelector, types.NoneType)):
+        if isinstance(compare_filter, (MultiFieldSelector, type(None))):
             self.compare_filter = compare_filter
         else:
             self.compare_filter = MultiFieldSelector(*compare_filter)
@@ -242,7 +242,7 @@ class DiffOptions(object):
         as not specified.  Called if ``ignore_empty_slots`` is true.  Checking
         the value for emptiness happens *after* all other normalization.
         """
-        return (not value and isinstance(value, (basestring, types.NoneType)))
+        return (not value and isinstance(value, (basestring, type(None))))
 
     def normalize_text(self, value):
         """This hook is called by :py:meth:`DiffOptions.normalize_val` if the
