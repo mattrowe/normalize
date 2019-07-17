@@ -19,7 +19,7 @@ types"""
 
 import datetime
 import numbers
-from sys import maxint
+from sys import maxsize
 
 from . import make_property_type
 from ..subtype import subtype
@@ -65,7 +65,7 @@ LongProperty = make_property_type(
 IntegerProperty = make_property_type(
     "IntegerProperty", isa=numbers.Integral, trait_name="integer",
     coerce=lambda x: (
-        int(x) if abs(float(x)) < maxint else long(x)
+        int(x) if abs(float(x)) < maxsize else long(x)
     ),
     attrs={
         "__doc__": "A property which holds an integer, int or long",

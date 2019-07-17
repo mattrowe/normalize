@@ -77,7 +77,7 @@ class Visitor(object):
 
         if visit_filter is None:
             visit_filter = filter
-        if isinstance(visit_filter, (MultiFieldSelector, types.NoneType)):
+        if isinstance(visit_filter, (MultiFieldSelector, type(None))):
             self.visit_filter = visit_filter
         else:
             self.visit_filter = MultiFieldSelector(*visit_filter)
